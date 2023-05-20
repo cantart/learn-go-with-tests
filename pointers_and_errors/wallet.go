@@ -1,5 +1,7 @@
 package pointersanderrors
 
+import "fmt"
+
 type Wallet struct {
 	balance int
 }
@@ -7,6 +9,7 @@ type Wallet struct {
 // In Go, when you call a function or a method the arguments are copied.
 
 func (w Wallet) Deposit(amount int) {
+	fmt.Printf("address of balance in Deposit is %v \n", &w.balance)
 	w.balance += amount
 }
 
