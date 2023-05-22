@@ -1,4 +1,4 @@
-package dependencyinjection
+package di
 
 import (
 	"bytes"
