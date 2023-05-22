@@ -38,6 +38,10 @@ func (d Dictionary) Add(word, definition string) error {
 	return nil
 }
 
+func (d Dictionary) Update(word, definition string) {
+	d[word] = definition
+}
+
 /*
 In Go, when you declare a map variable without initializing it, such as `var m map[string]string`,
 the variable `m` is initialized with the zero value for a map, which is `nil`.
