@@ -3,8 +3,16 @@ package main
 import (
 	"learngowithtests/mocking"
 	"os"
+	"time"
 )
 
+type DefaultSleeper struct{}
+
+func (d *DefaultSleeper) Sleep() {
+	time.Sleep(1 * time.Second)
+}
+
 func main() {
-	mocking.Countdown(os.Stdout)
+	sleeper := &DefaultSleeper{}
+	mocking.Countdown(os.Stdout, sleeper)
 }
