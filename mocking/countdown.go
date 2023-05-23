@@ -24,3 +24,9 @@ func Countdown(out io.Writer) {
 	}
 	fmt.Fprint(out, finalWord)
 }
+
+/*
+* we want to control sleeping because slow tests ruin developer productivity
+* If we can mock time.Sleep we can use dependency injection to use it instead of a "real" time.Sleep and then we can `spy on the calls`` to make assertions on them.
+
+ */
