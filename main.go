@@ -1,5 +1,10 @@
 package main
 
+import (
+	"learngowithtests/mocking"
+	"os"
+)
+
 func main() {
-	Countdown()
+	mocking.Countdown(os.Stdout)
 }
