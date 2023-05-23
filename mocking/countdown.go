@@ -10,5 +10,8 @@ This chapter will focus on It's an important skill to be able to slice up requir
 And, use DI to make function can work on test and terminal
 */
 func Countdown(out io.Writer) {
-	fmt.Fprint(out, "3")
+	for i := 3; i > 0; i-- {
+		fmt.Fprintln(out, i)
+	}
+	fmt.Fprint(out, "Go!")
 }
