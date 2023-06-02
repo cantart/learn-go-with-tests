@@ -26,3 +26,11 @@ func CheckWebsites(wc WebsiteChecker, urls []string) map[string]bool {
 	// time.Sleep(2 * time.Second)
 	return results
 }
+
+/*
+## Concurrent
+- goroutines
+- channel: use to help organize and control the communication between the different processes
+- race detector: test your code with race detector from `go test`
+- select: use to synchronise processes
+*/
