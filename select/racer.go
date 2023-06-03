@@ -1,7 +1,9 @@
 package racer
 
 import (
+	"fmt"
 	"net/http"
+	"time"
 )
 
 /*
@@ -10,12 +12,14 @@ import (
 * When you use var the variable will be initialised with the "zero" value of the type. So for string it is "", int it is 0, etc.
 */
 
-func Racer(a, b string) string {
+func Racer(a, b string) (string, error) {
 	select {
 	case <-ping(a):
-		return a
+		return a, nil
 	case <-ping(b):
-		return b
+		return b, nil
+	case <-time.After(10 * time.Second):
+		return "", fmt.Errorf("timed out waiting for %s and %s", a, b)
 	}
 }
 
