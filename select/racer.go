@@ -2,22 +2,30 @@ package racer
 
 import (
 	"net/http"
-	"time"
 )
 
+/*
+! NOTE
+* chan struct{} is the smallest data type available from a memory perspective so we get no allocation versus a bool
+* When you use var the variable will be initialised with the "zero" value of the type. So for string it is "", int it is 0, etc.
+*/
+
 func Racer(a, b string) string {
-	aDuration := measureResponseTime(a)
-	bDuration := measureResponseTime(b)
-
-	if aDuration < bDuration {
+	select {
+	case <-ping(a):
 		return a
+	case <-ping(b):
+		return b
 	}
-
-	return b
 }
 
-func measureResponseTime(url string) time.Duration {
-	startTime := time.Now()
-	http.Get(url)
-	return time.Since(startTime)
+func ping(url string) chan struct{} {
+	ch := make(chan struct{})
+	go func() {
+		http.Get(url)
+		close(ch)
+	}()
+
+	// fmt.Printf("url: %s, response: %T\n", url, <-ch)
+	return ch
 }
