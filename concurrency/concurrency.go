@@ -33,4 +33,6 @@ func CheckWebsites(wc WebsiteChecker, urls []string) map[string]bool {
 - channel: use to help organize and control the communication between the different processes
 - race detector: test your code with race detector from `go test`
 - select: use to synchronise processes
+
+! you cannot directly add data to a channel outside of a goroutine. Channels are primarily used for communication and synchronization between goroutines. To add data to a channel, you need to do so within a goroutine.
 */
