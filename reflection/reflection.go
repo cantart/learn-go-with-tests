@@ -39,6 +39,12 @@ func walk(x interface{}, fn func(input string)) {
 			// ok inform that channel is closed or not
 			walkValue(v)
 		}
+	case reflect.Func:
+		valFnResult := val.Call(nil)
+		for _, res := range valFnResult {
+			// fmt.Println(res.Kind())
+			walkValue(res)
+		}
 	}
 }
 
