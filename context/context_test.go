@@ -2,6 +2,7 @@ package context
 
 import (
 	"context"
+	"errors"
 	"log"
 	"net/http"
 	"net/http/httptest"
@@ -45,6 +46,26 @@ func (s *SpyStore) Fetch(ctx context.Context) (string, error) {
 	}
 }
 
+// We need to test that we do not write any kind of response on the error case. Sadly httptest.ResponseRecorder doesn't have a way of figuring this out so we'll have to roll our own spy to test for this.
+// So, we want to implement http.ResponseWriter interface
+type SpyResponseWriter struct {
+	written bool
+}
+
+func (s *SpyResponseWriter) Header() http.Header {
+	s.written = true
+	return nil
+}
+
+func (s *SpyResponseWriter) Write([]byte) (int, error) {
+	s.written = true
+	return 0, errors.New("not implemented")
+}
+
+func (s *SpyResponseWriter) WriteHeader(statusCode int) {
+	s.written = true
+}
+
 func TestServer(t *testing.T) {
 	data := "hello, world"
 
@@ -64,20 +85,23 @@ func TestServer(t *testing.T) {
 		// store.assertWasNotCancelled()
 	})
 
-	// t.Run("tells store to cancel work if request is cancelled", func(t *testing.T) {
-	// 	store := &SpyStore{response: data, t: t}
-	// 	svr := Server(store)
+	t.Run("tells store to cancel work if request is cancelled", func(t *testing.T) {
+		data := "hello, world"
+		store := &SpyStore{response: data, t: t}
+		svr := Server(store)
 
-	// 	request := httptest.NewRequest(http.MethodGet, "/", nil)
+		request := httptest.NewRequest(http.MethodGet, "/", nil)
 
-	// 	cancellingCtx, cancel := context.WithCancel(request.Context())
-	// 	time.AfterFunc(5*time.Millisecond, cancel)
-	// 	request = request.WithContext(cancellingCtx)
+		cancellingCtx, cancel := context.WithCancel(request.Context())
+		time.AfterFunc(5*time.Millisecond, cancel)
+		request = request.WithContext(cancellingCtx)
 
-	// 	response := httptest.NewRecorder()
+		response := &SpyResponseWriter{}
 
-	// 	svr.ServeHTTP(response, request)
+		svr.ServeHTTP(response, request)
 
-	// 	// store.assertWasCancelled()
-	// })
+		if response.written {
+			t.Error("a response should not have been written")
+		}
+	})
 }
