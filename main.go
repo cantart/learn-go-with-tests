@@ -1,7 +1,7 @@
 package main
 
 import (
-	"learngowithtests/mocking"
+	mocking "learngowithtests/08_mocking"
 	"os"
 	"time"
 )

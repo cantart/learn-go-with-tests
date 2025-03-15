@@ -1,7 +1,7 @@
 package interfacecasting_test
 
 import (
-	interfacecasting "learngowithtests/interface_casting"
+	interfacecasting "learngowithtests/14_interface_casting"
 	"learngowithtests/utils"
 	"reflect"
 	"testing"
